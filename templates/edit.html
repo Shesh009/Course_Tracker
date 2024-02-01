@@ -1,0 +1,50 @@
+{% extends 'base1.html' %}
+{% block body %}
+<div class="container">
+    <form action="/edit" method="POST">
+        <div class="mb-3" style="width: 30%; align-items: center;">
+            <label for="name" class="form-label">Course</label>
+            <input type="text" id="name" class="form-control" name="name" value="{{ course }}" required aria-describedby="basic-addon1">
+        </div>
+    </form>
+    <div class="container">
+        <br>
+        <h4>Modules</h4>
+        <table class="table table-bordered border-primary" style="width: 70%;">
+            <thead>
+                <tr>
+                    <th scope="col">SNo</th>
+                    <th scope="col">Module</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td scope="row">{{loop.index}}</td>
+                    <td>{{ row[0] }}</td>
+                    <!-- <td>{{ row[1] }}</td>   -->
+                    {% if row[1] == "0" %}
+                        <td>Not Completed</td>
+                    {% else %}
+                        <td>Completed</td>
+                    {% endif %}
+                    </td>
+                    <td>
+                        <div>
+                            <form action="/update_status/{{row[0]}}" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-outline-dark btn-sm mx-1" value="UPDATE">Change</button>
+                            </form>
+                            <form action="/delete_module/{{row[0]}}" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-outline-dark btn-sm mx-1" value="Delete">Delete</button>
+                            </form>
+                        </div>
+                    </td> 
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

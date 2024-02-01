@@ -1,0 +1,35 @@
+{% extends 'base1.html' %}
+{% block body %}
+<div class="container">
+    <br>
+    <h4>Your Courses</h4>
+    <table class="table table-bordered border-primary" style="width: 70%;">
+        <thead>
+            <tr>
+                <th>SNo</th>
+                <th>Course</th>
+                <th>Total Modules</th>
+                <th>Completed</th>
+                <th>Percentage</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td scope="row">{{loop.index}}</td>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{row[2]}}</td>
+                <td>{{row[3]}}</td>
+                <td>
+                    <form action="/delete_course/{{row[0]}}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-outline-dark btn-sm mx-1" value="DELETE">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock body %}

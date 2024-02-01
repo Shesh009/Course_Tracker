@@ -1,0 +1,61 @@
+{% extends 'base1.html' %}
+{% block body %}
+<style>
+    .input-row {
+        margin-bottom: 10px;
+    }
+
+    .input-row input {
+        margin-right: 10px;
+    }
+</style>
+<style>
+    .hidden-label {
+        display: none;
+    }
+</style>
+
+<div class="container">
+    <form action="/add_course" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name of the course</label>
+            <input type="text" id="name" class="form-control" name="name" required aria-describedby="basic-addon1">
+        </div>
+        <div class="mb-3">
+            <label for="number" class="hidden-label">Enter no.of modules (n)</label>
+            <input type="number" id="number" name="number" placeholder="Enter no.of modules" required aria-describedby="basic-addon1" onkeydown="return event.key != 'Enter';">
+        </div>
+        <div id="inputFields" class="input-row"></div>
+        <button type="button" onclick="addInputs()" id="addModulesButton" class="btn btn-outline-dark">Add modules</button>
+        <!-- <button type="submit">Submit</button> -->
+        <br>
+        <button type="submit" id="addCourseButton" class="btn btn-primary">Add Course</button>
+    </form>
+</div>
+
+<script>
+    function addInputs() {
+        const n = document.getElementById("number").value;
+        const inputFieldsDiv = document.getElementById("inputFields");
+        inputFieldsDiv.innerHTML = "";  // Clear existing inputs
+
+        for (let i = 1; i <= n; i++) {
+            if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("addModulesButton").click();
+            }
+            const input = document.createElement("input");
+            input.type = "text";
+            input.name = `module_${i}`;  // Corrected the name attribute
+            input.placeholder = `Enter module ${i}`;
+            input.required = true;
+            input.classList.add("form-control");
+
+            inputFieldsDiv.appendChild(input);
+            inputFieldsDiv.appendChild(document.createElement("br"));  // Add line break for a new row
+        }
+        document.getElementById("addModulesButton").style.display = "none";
+    }
+</script>
+
+{% endblock body %}
