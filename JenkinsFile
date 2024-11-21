@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.9-slim'
+            image 'sheshu009/python-flask-sonarqube:latest'
             args '--user root --volume /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -46,25 +46,20 @@ pipeline {
         }
 
         stage('Static Code Analysis') {
-            agent{
-                docker{
-                    image 'sonarqube:lts'
-                    args '--user root --volume /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
             steps {
-                script {
-                    withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-                        sh '''
-                          echo "Running SonarQube analysis for the Flask app"
-                          docker run --rm \
-                            -e SONAR_HOST_URL=$SONAR_URL \
-                            -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
-                            -v "$(pwd)/app:/usr/src" \
-                            sonarsource/sonar-scanner-cli \
-                            -Dsonar.projectKey=course-tracker \
-                            -Dsonar.sources=/usr/src
-                        '''
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                    script {
+                        // Create sonar-project.properties dynamically if not present
+                        sh """
+                            if [ ! -f sonar-project.properties ]; then
+                                echo "sonar.projectKey=Course-Tracker" > sonar-project.properties
+                                echo "sonar.sources=." >> sonar-project.properties
+                                echo "sonar.host.url=${SONAR_URL}" >> sonar-project.properties
+                                echo "sonar.login=\$SONAR_AUTH_TOKEN" >> sonar-project.properties
+                            fi
+                        """
+                        // Run SonarQube Scanner
+                        sh "sonar-scanner -Dsonar.login=\$SONAR_AUTH_TOKEN"
                     }
                 }
             }
