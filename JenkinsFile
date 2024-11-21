@@ -20,7 +20,7 @@ pipeline {
             steps {
                 sh '''
                   echo "Cloning the Flask application repository"
-                  // git clone https://github.com/Shesh009/Course_Tracker_.git /app
+                  git clone https://github.com/Shesh009/Course_Tracker_.git /app
                 '''
             }
         }
@@ -29,8 +29,8 @@ pipeline {
             steps {
                 sh '''
                   echo "Installing dependencies for the Flask app"
-                  python -m venv venv
-                  . venv/bin/activate && pip install -r /app/requirements.txt
+                  python -m venv /app/venv
+                  . /app/venv/bin/activate && pip install -r /app/requirements.txt
                 '''
             }
         }
@@ -41,6 +41,7 @@ pipeline {
                     script {
                         // Create sonar-project.properties dynamically if not present
                         sh """
+                            cd /app
                             if [ ! -f sonar-project.properties ]; then
                                 echo "sonar.projectKey=Course-Tracker" > sonar-project.properties
                                 echo "sonar.sources=." >> sonar-project.properties
