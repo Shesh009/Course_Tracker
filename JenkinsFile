@@ -46,6 +46,12 @@ pipeline {
         }
 
         stage('Static Code Analysis') {
+            agent{
+                docker{
+                    image 'sonarqube:lts'
+                    args '--user root'
+                }
+            }
             steps {
                 script {
                     withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
