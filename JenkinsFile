@@ -20,7 +20,7 @@ pipeline {
       steps {
         sh '''
           echo "Installing git in the Docker container"
-          // apt-get update && apt-get install -y git
+          apt-get update && apt-get install -y git
           echo "Setup stage is passed"
         '''
       }
@@ -30,7 +30,8 @@ pipeline {
       steps {
         sh '''
           echo "Cloning the Flask application repository"
-          // git clone https://github.com/Shesh009/Course_Tracker_.git
+          git clone https://github.com/Shesh009/Course_Tracker_.git /app
+          cd /app
           echo "Checkout stage passed"
         '''
       }
@@ -41,7 +42,7 @@ pipeline {
         sh '''
           echo "Installing dependencies for the Flask app"
           python -m venv venv
-          . venv/bin/activate && pip install -r requirements.txt
+          . venv/bin/activate && pip install -r /app/requirements.txt
         '''
       }
     }
@@ -52,6 +53,7 @@ pipeline {
           withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
             sh '''
               echo "Running SonarQube analysis for the Flask app"
+              cd /app
               sonar-scanner -Dsonar.projectKey=course-tracker -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=$SONAR_URL
             '''
           }
@@ -67,6 +69,7 @@ pipeline {
         script {
           sh '''
             echo "Building the Docker image for the Flask app"
+            cd /app
             docker build -t ${DOCKER_IMAGE} .
 
             echo "Pushing the Docker image to DockerHub"
