@@ -34,22 +34,9 @@ pipeline {
         stage('Static Code Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-                    script {
-                        // Create sonar-project.properties dynamically if not present
-                        sh """
-                            cd /app
-                            if [ ! -f sonar-project.properties ]; then
-                                echo "sonar.projectKey=Course-Tracker" > sonar-project.properties
-                                echo "sonar.sources=." >> sonar-project.properties
-                                echo "sonar.host.url=${SONAR_URL}" >> sonar-project.properties
-                                echo "sonar.login=\$SONAR_AUTH_TOKEN" >> sonar-project.properties
-                            fi
-                        """
-                        // Run SonarQube Scanner
-                        sh "sonar-scanner -Dsonar.login=\$SONAR_AUTH_TOKEN"
-                    }
+                  sh 'sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
                 }
-            }
+              }
         }
 
         stage('Build and Push Docker Image') {
