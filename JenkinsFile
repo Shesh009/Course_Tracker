@@ -1,22 +1,27 @@
 pipeline {
   agent {
     docker {
-      // Use a base Docker image for Jenkins builds
       image 'python:3.9-slim' 
-      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // Mount Docker socket to access the host's Docker daemon
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
     }
   }
 
   environment {
-    SONAR_URL = "http://192.168.44.213:9000" // SonarQube instance URL
-    DOCKER_REGISTRY = "docker.io" // Docker registry (default is DockerHub)
-    DOCKER_CREDENTIALS = 'docker-cred' // Jenkins credentials ID for DockerHub
-    GITHUB_REPO = 'Course_Tracker_' // GitHub repository name
-    GITHUB_USER = 'Shesh009' // GitHub username
-    SONAR_AUTH_TOKEN = credentials('sonarqube') // Jenkins credentials for SonarQube token
+    SONAR_URL = "http://192.168.44.213:9000" 
+    DOCKER_REGISTRY = "docker.io" 
+    DOCKER_CREDENTIALS = 'docker-cred' 
+    GITHUB_REPO = 'Course_Tracker_' 
+    GITHUB_USER = 'Shesh009' 
+    SONAR_AUTH_TOKEN = credentials('sonarqube') 
   }
 
   stages {
+    stage('Clean Workspace') {
+      steps {
+        cleanWs() // Clean the workspace to avoid conflicts
+      }
+    }
+
     stage('Setup Git') {
       steps {
         sh '''
@@ -28,12 +33,10 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        script {
-          sh '''
-            echo "Checking out the Flask application repository"
-            git clone https://github.com/Shesh009/Course_Tracker_.git .
-          '''
-        }
+        sh '''
+          echo "Cloning the Flask application repository"
+          git clone https://github.com/Shesh009/Course_Tracker_.git .
+        '''
       }
     }
 
@@ -63,7 +66,7 @@ pipeline {
 
     stage('Build and Push Docker Image') {
       environment {
-        DOCKER_IMAGE = "sheshu009/ct-app:v${BUILD_NUMBER}" // Docker image tag based on Jenkins build number
+        DOCKER_IMAGE = "sheshu009/ct-app:v${BUILD_NUMBER}" 
       }
       steps {
         script {
