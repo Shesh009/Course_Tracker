@@ -16,21 +16,11 @@ pipeline {
     }
 
     stages {
-        stage('Setup Git') {
-            steps {
-                sh '''
-                  echo "Installing git in the Docker container"
-                  apt-get update && apt-get install -y git
-                  echo "Setup stage is passed"
-                '''
-            }
-        }
-
         stage('Checkout') {
             steps {
                 sh '''
                   echo "Cloning the Flask application repository"
-                  git clone https://github.com/Shesh009/Course_Tracker_.git /app
+                  // git clone https://github.com/Shesh009/Course_Tracker_.git /app
                 '''
             }
         }
