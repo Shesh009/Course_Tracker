@@ -34,9 +34,15 @@ pipeline {
         stage('Static Code Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-                  sh 'sonar-scanner -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                    sh '''
+                      sonar-scanner \
+                      -Dsonar.login=$SONAR_AUTH_TOKEN \
+                      -Dsonar.host.url=${SONAR_URL} \
+                      -Dsonar.projectKey=Course-Tracker \
+                      -Dsonar.projectVersion=v${BUILD_NUMBER}
+                    '''
                 }
-              }
+            }
         }
 
         stage('Build and Push Docker Image') {
