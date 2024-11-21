@@ -17,6 +17,15 @@ pipeline {
   }
 
   stages {
+    stage('Setup Git') {
+      steps {
+        sh '''
+          echo "Installing git in the Docker container"
+          apt-get update && apt-get install -y git
+        '''
+      }
+    }
+
     stage('Checkout') {
       steps {
         script {
