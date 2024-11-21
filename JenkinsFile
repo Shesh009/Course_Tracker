@@ -2,7 +2,7 @@ pipeline {
   agent {
         docker {
             image 'python:3.9-slim'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
+            args '--user root'
         }
     }
 
@@ -17,15 +17,14 @@ pipeline {
 
   stages {
     stage('Setup Git') {
-      steps {
-        sh '''
-          echo "Installing git in the Docker container"
-          apt-get update && apt-get install -y git
-          echo "Setup stage is passed"
-        '''
-      }
-    }
-
+            steps {
+                sh '''
+                  echo "Installing git in the Docker container"
+                  apt-get update && apt-get install -y git
+                  echo "Setup stage is passed"
+                '''
+            }
+        }
     stage('Checkout') {
       steps {
         sh '''
