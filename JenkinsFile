@@ -16,13 +16,11 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                sh '''
-                  echo "Cloning the Flask application repository"
-                  git clone https://github.com/Shesh009/Course_Tracker_.git /app
-                '''
-            }
+         stage('Checkout') {
+          steps {
+            sh 'echo passed'
+            //git branch: 'main', url: 'https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
+          }
         }
 
         stage('Install Dependencies') {
