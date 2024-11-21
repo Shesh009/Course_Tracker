@@ -16,12 +16,6 @@ pipeline {
   }
 
   stages {
-    stage('Clean Workspace') {
-      steps {
-        cleanWs() // Clean the workspace to avoid conflicts
-      }
-    }
-
     stage('Setup Git') {
       steps {
         sh '''
@@ -45,8 +39,7 @@ pipeline {
         sh '''
           echo "Installing dependencies for the Flask app"
           python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
+          . venv/bin/activate && pip install -r requirements.txt
         '''
       }
     }
@@ -82,13 +75,6 @@ pipeline {
           }
         }
       }
-    }
-  }
-
-  post {
-    always {
-      echo 'Cleaning up after build'
-      cleanWs() // Clean up workspace after the build
     }
   }
 }
