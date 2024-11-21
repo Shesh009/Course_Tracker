@@ -1,22 +1,22 @@
 pipeline {
-  agent {
+    agent {
         docker {
             image 'python:3.9-slim'
             args '--user root'
         }
     }
 
-  environment {
-    SONAR_URL = "http://192.168.44.213:9000" 
-    DOCKER_REGISTRY = "docker.io" 
-    DOCKER_CREDENTIALS = 'docker-cred' 
-    GITHUB_REPO = 'Course_Tracker_' 
-    GITHUB_USER = 'Shesh009' 
-    SONAR_AUTH_TOKEN = credentials('sonarqube') 
-  }
+    environment {
+        SONAR_URL = "http://192.168.44.213:9000"
+        DOCKER_REGISTRY = "docker.io"
+        DOCKER_CREDENTIALS = 'docker-cred'
+        GITHUB_REPO = 'Course_Tracker_'
+        GITHUB_USER = 'Shesh009'
+        SONAR_AUTH_TOKEN = credentials('sonarqube')
+    }
 
-  stages {
-    stage('Setup Git') {
+    stages {
+        stage('Setup Git') {
             steps {
                 sh '''
                   echo "Installing git in the Docker container"
@@ -25,61 +25,62 @@ pipeline {
                 '''
             }
         }
-    stage('Checkout') {
-      steps {
-        sh '''
-          echo "Cloning the Flask application repository"
-          git clone https://github.com/Shesh009/Course_Tracker_.git /app
-          cd /app
-          echo "Checkout stage passed"
-        '''
-      }
-    }
 
-    stage('Install Dependencies') {
-      steps {
-        sh '''
-          echo "Installing dependencies for the Flask app"
-          python -m venv venv
-          . venv/bin/activate && pip install -r /app/requirements.txt
-        '''
-      }
-    }
-
-    stage('Static Code Analysis') {
-      steps {
-        script {
-          withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-            sh '''
-              echo "Running SonarQube analysis for the Flask app"
-              sonar-scanner -Dsonar.projectKey=course-tracker \
-                        -Dsonar.login=$SONAR_AUTH_TOKEN \
-                        -Dsonar.host.url=$SONAR_URL
-            '''
-          }
+        stage('Checkout') {
+            steps {
+                sh '''
+                  echo "Cloning the Flask application repository"
+                  git clone https://github.com/Shesh009/Course_Tracker_.git /app
+                '''
+            }
         }
-      }
-    }
 
-    stage('Build and Push Docker Image') {
-      environment {
-        DOCKER_IMAGE = "sheshu009/ct-app:v${BUILD_NUMBER}" 
-      }
-      steps {
-        script {
-          sh '''
-            echo "Building the Docker image for the Flask app"
-            cd /app
-            docker build -t ${DOCKER_IMAGE} .
-
-            echo "Pushing the Docker image to DockerHub"
-          '''
-          def dockerImage = docker.image("${DOCKER_IMAGE}")
-          docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
-            dockerImage.push()
-          }
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                  echo "Installing dependencies for the Flask app"
+                  python -m venv venv
+                  . venv/bin/activate && pip install -r /app/requirements.txt
+                '''
+            }
         }
-      }
+
+        stage('Static Code Analysis') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                        sh '''
+                          echo "Running SonarQube analysis for the Flask app"
+                          docker run --rm \
+                            -e SONAR_HOST_URL=$SONAR_URL \
+                            -e SONAR_LOGIN=$SONAR_AUTH_TOKEN \
+                            -v "$(pwd)/app:/usr/src" \
+                            sonarsource/sonar-scanner-cli \
+                            -Dsonar.projectKey=course-tracker \
+                            -Dsonar.sources=/usr/src
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Build and Push Docker Image') {
+            environment {
+                DOCKER_IMAGE = "sheshu009/ct-app:v${BUILD_NUMBER}"
+            }
+            steps {
+                script {
+                    sh '''
+                      echo "Building the Docker image for the Flask app"
+                      cd /app
+                      docker build -t ${DOCKER_IMAGE} .
+                    '''
+                    def dockerImage = docker.image("${DOCKER_IMAGE}")
+                    docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
     }
-  }
 }
