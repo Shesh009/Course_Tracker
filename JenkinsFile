@@ -54,7 +54,7 @@ pipeline {
 
     stage('Build and Push Docker Image') {
       environment {
-        DOCKER_IMAGE = "sheshu009/ct-app:${BUILD_NUMBER}" // Docker image tag based on Jenkins build number
+        DOCKER_IMAGE = "sheshu009/ct-app:v${BUILD_NUMBER}" // Docker image tag based on Jenkins build number
       }
       steps {
         script {
