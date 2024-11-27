@@ -66,15 +66,18 @@ pipeline {
         }
 
         stage('Commit SonarQube Report') {
+            environment {
+                GIT_REPO_NAME = "Course_Tracker_"
+                GIT_USER_NAME = "Shesh009"
+            }
             steps {
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                     sh '''
-                        echo "Committing the SonarQube report to the GitHub repository..."
+                        git config user.email "sheshusheshu035@gmail.com"
+                        git config user.name "Sheshu Akula"
 
-                        # Mark the Jenkins workspace as a safe directory for Git
                         git config --global --add safe.directory /var/lib/jenkins/workspace/Course-Tracker-Pipeline-1
 
-                        # Add and commit the report file to GitHub
                         git add sonar-report.json
                         git commit -m "Add SonarQube report for Build ${BUILD_NUMBER}"
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
@@ -82,6 +85,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('Build and Push Docker Image') {
             environment {
