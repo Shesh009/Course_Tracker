@@ -63,5 +63,30 @@ pipeline {
                 }
             }
         }
+
+        stage('Update Deployment File') {
+            environment {
+                GIT_REPO_NAME = "Course_Tracker_"
+                GIT_USER_NAME = "Shesh009"
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        # Configure Git user information
+                        git config user.email "sheshusheshu035@gmail.com"
+                        git config user.name "Sheshu Akula"
+
+                        # Replace placeholder with BUILD_NUMBER in deployment.yaml
+                        BUILD_NUMBER=${BUILD_NUMBER}
+                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" manifests/deployment.yaml
+
+                        # Add, commit, and push changes to GitHub
+                        git add manifests/deployment.yaml
+                        git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                    '''
+                }
+            }
+        }
     }
 }
