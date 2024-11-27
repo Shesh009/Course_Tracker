@@ -44,6 +44,42 @@ pipeline {
             }
         }
 
+        stage('Fetch SonarQube Report') {
+            environment {
+                REPORT_FILE = "sonar-report.json"
+            }
+            steps {
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                    sh '''
+                        echo "Fetching SonarQube analysis report..."
+
+                        # Query SonarQube API for analysis details
+                        curl -u ${SONAR_AUTH_TOKEN}: \
+                        "${SONAR_URL}/api/measures/component_tree?component=Course-Tracker&metricKeys=ncloc,complexity,violations" \
+                        -o ${REPORT_FILE}
+
+                        # Display the report file content for validation
+                        cat ${REPORT_FILE}
+                    '''
+                }
+            }
+        }
+
+        stage('Commit SonarQube Report') {
+            steps {
+                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        echo "Committing the SonarQube report to the GitHub repository..."
+
+                        # Add and commit the report file to GitHub
+                        git add sonar-report.json
+                        git commit -m "Add SonarQube report for Build ${BUILD_NUMBER}"
+                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                    '''
+                }
+            }
+        }
+
         stage('Build and Push Docker Image') {
             environment {
                 DOCKER_IMAGE = "sheshu009/ct-app:v${BUILD_NUMBER}"
