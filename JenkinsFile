@@ -16,16 +16,16 @@ pipeline {
     }
 
     stages {
-         stage('Checkout') {
-          steps {
-            sh 'echo passed'
-          }
+        stage('Checkout') {
+            steps {
+                sh 'echo passed'
+            }
         }
 
         stage('Install Dependencies') {
             steps {
                 sh '''
-                  pip install -r requirements.txt
+                  pip install --no-cache-dir -r requirements.txt
                 '''
             }
         }
@@ -70,6 +70,9 @@ pipeline {
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                     sh '''
                         echo "Committing the SonarQube report to the GitHub repository..."
+
+                        # Mark the Jenkins workspace as a safe directory for Git
+                        git config --global --add safe.directory /var/lib/jenkins/workspace/Course-Tracker-Pipeline-1
 
                         # Add and commit the report file to GitHub
                         git add sonar-report.json
