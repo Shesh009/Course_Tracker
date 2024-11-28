@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: sheshu009/course-tracker:7
+        image: sheshu009/course-tracker:replaceImageTag
         ports:
         - containerPort: 5000
