@@ -20,7 +20,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 sh 'echo passed'
-                sh 'cat ${ENV}'
+                sh 'echo "${ENV}" > .env'
+                sh 'cat .env'
             }
         }
 
@@ -76,7 +77,7 @@ pipeline {
                     sh '''
                       echo "Building the Docker image for the Flask app"
                       cd /app
-                      docker build --build-arg ENV_FILE=ENV -t ${DOCKER_IMAGE} .
+                      docker build --build-arg ENV_FILE=.env -t ${DOCKER_IMAGE} .
                     '''
                     def dockerImage = docker.image("${DOCKER_IMAGE}")
                     docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
