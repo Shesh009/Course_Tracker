@@ -67,7 +67,7 @@ pipeline {
 
         stage('Build and Push Docker Image') {
             environment {
-                DOCKER_IMAGE = "sheshu009/ct-app:v${BUILD_NUMBER}"
+                DOCKER_IMAGE = "sheshu009/course-tracker:v${BUILD_NUMBER}"
             }
             steps {
                 script {
