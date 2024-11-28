@@ -16,10 +16,6 @@ spec:
     spec:
       containers:
       - name: flask-app
-<<<<<<< HEAD
         image: sheshu009/course-tracker:replaceImageTag
-=======
-        image: sheshu009/ct-app:3
->>>>>>> 55632342cd0e580d5782d42bf5f6949ada44685e
         ports:
         - containerPort: 5000
