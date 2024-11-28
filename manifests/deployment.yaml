@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: sheshu009/ct-app:replaceImageTag
+        image: sheshu009/ct-app:3
         ports:
         - containerPort: 5000
