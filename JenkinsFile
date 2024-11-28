@@ -56,12 +56,10 @@ pipeline {
                     sh '''
                         echo "Fetching SonarQube analysis report..."
 
-                        # Query SonarQube API for analysis details
                         curl -u ${SONAR_AUTH_TOKEN}: \
                         "${SONAR_URL}/api/measures/component_tree?component=Course-Tracker&metricKeys=ncloc,complexity,violations" \
                         -o ${REPORT_FILE}
 
-                        # Display the report file content for validation
                         cat ${REPORT_FILE}
                     '''
                 }
