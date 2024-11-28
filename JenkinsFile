@@ -76,6 +76,8 @@ pipeline {
                         git config --global user.email "sheshusheshu035@gmail.com"
                         git config --global user.name "Akula Sheshu"
 
+                        git config --global --add safe.directory /var/lib/jenkins/workspace/Course-Tracker-Pipeline
+
                         git add sonar-report.json
                         git commit -m "Add SonarQube report for Build ${BUILD_NUMBER}"
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
