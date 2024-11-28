@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% block body %}
-<!-- Button trigger modal -->
 <form action="/delete_account" method="POST">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Delete Account
     </button>
     
-    <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -31,7 +31,6 @@ def register():
             if password == confirm_password:
                 connection = connect_to_mysql()
                 if connection:
-                    # create_tables(connection)
                     cursor = connection.cursor()
                     insert_query = "INSERT INTO CREDENTIALS (NAME, EMAIL, PASSWORD) VALUES (%s, %s, %s)"
                     cursor.execute(insert_query, (name, email, password))
@@ -106,7 +105,6 @@ def show():
         if result:
                 for i in result:
                     tab.append([i[0],str(i[1]),str(i[2]),str(i[3])+"%"])
-                # tabulate(tab,headers=["Course","Total Modules","Completed","Percentage"])
         connection.commit()
         cursor.close()
         connection.close()

@@ -27,7 +27,6 @@
         </div>
         <div id="inputFields" class="input-row"></div>
         <button type="button" onclick="addInputs()" id="addModulesButton" class="btn btn-outline-dark">Add modules</button>
-        <!-- <button type="submit">Submit</button> -->
         <br>
         <button type="submit" id="addCourseButton" class="btn btn-primary">Add Course</button>
     </form>
@@ -37,7 +36,7 @@
     function addInputs() {
         const n = document.getElementById("number").value;
         const inputFieldsDiv = document.getElementById("inputFields");
-        inputFieldsDiv.innerHTML = "";  // Clear existing inputs
+        inputFieldsDiv.innerHTML = "";
 
         for (let i = 1; i <= n; i++) {
             if (event.keyCode === 13) {
@@ -46,13 +45,13 @@
             }
             const input = document.createElement("input");
             input.type = "text";
-            input.name = `module_${i}`;  // Corrected the name attribute
+            input.name = `module_${i}`;  
             input.placeholder = `Enter module ${i}`;
             input.required = true;
             input.classList.add("form-control");
 
             inputFieldsDiv.appendChild(input);
-            inputFieldsDiv.appendChild(document.createElement("br"));  // Add line break for a new row
+            inputFieldsDiv.appendChild(document.createElement("br")); 
         }
         document.getElementById("addModulesButton").style.display = "none";
     }
