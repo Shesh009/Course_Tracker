@@ -99,9 +99,9 @@ pipeline {
                         git config --global --add safe.directory /var/lib/jenkins/workspace/Course-Tracker-Pipeline
 
                         BUILD_NUMBER=${BUILD_NUMBER}
-                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" manifests/deployment.yaml
+                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" manifests/deployment.yml
 
-                        git add manifests/deployment.yaml
+                        git add manifests/deployment.yml
                         git commit -m "Updated Image version to ${BUILD_NUMBER} in manifest."
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                     '''
