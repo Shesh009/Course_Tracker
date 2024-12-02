@@ -16,7 +16,7 @@ This project is a **Full-Stack Web Application** designed to host meetings and t
 - [Prerequisites](#prerequisites)
 - [Setup and Installation](#setup-and-installation)
 - [Jenkins Pipeline Overview](#jenkins-pipeline-overview)
-- [Kubernetes Deployment](#kubernetes-deployment)
+- [Deployment](#deployment)
 - [Using DockerHub Image](#using-dockerhub-image)
 - [SonarQube Integration](#sonarqube-integration)
 - [Docker Build Process](#docker-build-process)
