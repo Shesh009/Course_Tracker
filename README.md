@@ -85,6 +85,7 @@ The application should now be running on `http://localhost:5000`.
 ---
 
 ## Jenkins Pipeline Overview
+**Jenkins**: A CI/CD automation server that allows developers to build, test, and deploy applications efficiently in an automated pipeline.
 
 ### Jenkinsfile Stages
 1. **Checkout**: Pull the latest code from the Git repository.
@@ -124,6 +125,8 @@ kubectl apply -f manifests/service.yml
 ---
 
 ## Using DockerHub Image
+**Docker**:A containerization tool that packages applications and dependencies into portable containers, ensuring consistency across environments.
+
 Users can directly run the application using the pre-built Docker image hosted on **DockerHub**. This allows for easy setup without needing to clone the repository or build the image locally.
 
 ### Steps to Use the DockerHub Image
@@ -148,6 +151,7 @@ The application will be up and running, ready for use!
 ---
 
 ## SonarQube Integration
+**SonarQube**: An open-source platform for continuous code quality inspection, providing metrics such as maintainability, security, and test coverage.
 - The `Static Code Analysis` stage in the Jenkins pipeline uses the `sonar-scanner` to analyze the code.
 - The analysis includes metrics such as **code complexity**, **violations**, and **lines of code**.
 
@@ -174,6 +178,7 @@ This is automatically triggered beacause of the Dockerfile present in the folder
 ---
 
 ## ArgoCD Deployment Process
+**ArgoCD**: A GitOps continuous delivery tool for Kubernetes that synchronizes application state between Git repositories and clusters.
 
 ### Steps
 1. **Sync the Application**:
