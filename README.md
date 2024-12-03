@@ -122,7 +122,7 @@ Defines a deployment with:
 
 ### Service Configuration (`manifests/service.yml`)
 Defines a service with:
-- **Type**: LoadBalancer to expose the application externally.
+- **Type**: NodePort to expose the application.
 - **Port**: Maps port `80` to the Flask container's port `5000`.
 
 ### Deploy to Kubernetes
@@ -207,7 +207,7 @@ This is automatically triggered due to the Dockerfile present in the folder.
 ## Usage
 
 ### Access the Application
-- The application will be exposed on the external IP provided by the Kubernetes LoadBalancer or directly on `http://localhost:5000` when using the DockerHub image.
+- The application will be exposed on the Organizational IP (such as on same network) provided by the Kubernetes NodePort or directly on `http://localhost:5000` when using the DockerHub image.
 
 ### Monitor the Application
 - Use tools like `kubectl` to monitor the status of the pods and services:
