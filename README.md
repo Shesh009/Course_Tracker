@@ -1,12 +1,6 @@
-<!-- Hello,
+# Course Tracker Application
 
-  This is a web application created using python-flask which is used to track your progress the course which is taken online/offline by adding your course and modules in the course by tracking them as completed or not.
-
-  #Link for this website is : https://progress-tracker-dgg2.onrender.com/ -->
-
-# Course Tracker Full-Stack Application
-
-This project is a **Full-Stack Web Application** designed to host meetings and track course-related activities. The application includes the backend (Flask) and frontend components. The project integrates **SonarQube** for code quality analysis, **Docker** for containerization, and **Jenkins** for CI/CD pipelines. The deployment is managed using **ArgoCD** on a Kubernetes cluster.
+This project is a **Flask-based Full-Stack Application** designed to manage and track courses effectively. The application includes features for organizing course-related information, monitoring progress, and ensuring efficient tracking. It incorporates modern development and deployment tools such as **SonarQube** for code quality analysis, **Docker** for containerization, **Jenkins** for CI/CD automation, and **ArgoCD** for GitOps-based Kubernetes deployment.
 
 ---
 
@@ -34,6 +28,8 @@ This project is a **Full-Stack Web Application** designed to host meetings and t
 - **Orchestration**: Kubernetes
 - **Deployment Tool**: ArgoCD
 
+> **Note:** The application is deployed in a **Kubernetes cluster**, with ArgoCD handling GitOps-based deployment management.
+
 ---
 
 ## Project Structure
@@ -41,15 +37,28 @@ This project is a **Full-Stack Web Application** designed to host meetings and t
 Course-Tracker/
 ├── app/
 │   ├── app.py                # Flask backend application
+│   ├── models.py             # Database models
+│   ├── templates/            # HTML templates (for basic UI)
+│   ├── static/               # Static files (CSS, JS, images)
 │   ├── requirements.txt      # Python dependencies
-│   └── other files
+│   └── config.py             # Configuration settings
 ├── manifests/
-│   ├── deployment.yml        # deployment 
-│   ├── service.yml           # service configuration
+│   ├── deployment.yml        # Kubernetes deployment configuration
+│   ├── service.yml           # Kubernetes service configuration
 ├── Jenkinsfile               # CI/CD pipeline configuration
 ├── Dockerfile                # Docker image build configuration
 └── README.md                 # Project documentation
 ```
+
+---
+
+## Features
+- **Add Courses**: Users can add new courses with relevant details.
+- **Track Progress**: Monitor course completion status and milestones.
+- **Search and Filter**: Search courses by title or filter by progress/completion.
+- **Database Integration**: Store and retrieve course information efficiently.
+- **Containerized Deployment**: Deploy using Docker for consistent environments.
+- **GitOps Deployment**: Managed via ArgoCD for Kubernetes clusters.
 
 ---
 
@@ -96,7 +105,7 @@ The application should now be running on `http://localhost:5000`.
    - Build the Flask app's Docker image.
    - Push the image to Docker Hub.
 6. **Update Deployment File**:
-   - Update the Kubernetes `deployment.yml` file with the latest Docker image tag using jenkins build number.
+   - Update the Kubernetes `deployment.yml` file with the latest Docker image tag using Jenkins build number.
    - Commit and push changes to the Git repository.
 
 ### Usage
@@ -122,12 +131,12 @@ kubectl apply -f manifests/deployment.yml
 kubectl apply -f manifests/service.yml
 ```
 
+> **Kubernetes Cluster:** The application is deployed to a **Kubernetes cluster**, ensuring high availability and scalability.
+
 ---
 
 ## Using DockerHub Image
-**Docker**:A containerization tool that packages applications and dependencies into portable containers, ensuring consistency across environments.
-
-Users can directly run the application using the pre-built Docker image hosted on **DockerHub**. This allows for easy setup without needing to clone the repository or build the image locally.
+**Docker**: A containerization tool that packages applications and dependencies into portable containers, ensuring consistency across environments.
 
 ### Steps to Use the DockerHub Image
 1. **Pull the Docker Image**:
@@ -138,7 +147,6 @@ Users can directly run the application using the pre-built Docker image hosted o
    ```bash
    docker run -d -p 5000:5000 sheshu009/course-tracker:latest
    ```
-   Use the environment files accordingly.
 
 3. **Access the Application**:
    Open your browser and navigate to:
@@ -173,7 +181,7 @@ sonar-scanner \
 docker build -t <your_dockerhub_username>/course-tracker:v1 .
 docker push <your_dockerhub_username>/course-tracker:v1
 ```
-This is automatically triggered beacause of the Dockerfile present in the folder.
+This is automatically triggered due to the Dockerfile present in the folder.
 
 ---
 
@@ -191,6 +199,8 @@ This is automatically triggered beacause of the Dockerfile present in the folder
      kubectl get svc
      ```
    - Use the IP and port `80` to access the application.
+
+> **ArgoCD on Kubernetes:** The application leverages **ArgoCD** for managing deployments within the **Kubernetes cluster**, ensuring seamless GitOps-based updates.
 
 ---
 
@@ -211,7 +221,6 @@ This is automatically triggered beacause of the Dockerfile present in the folder
 ## Additional Notes
 - Ensure that your SonarQube, Docker Hub credentials, and GitHub access token are configured in Jenkins as credentials.
 - ArgoCD can be configured for automatic sync for a seamless CI/CD pipeline.
-<!-- - The Flask application is ready to be extended with React for frontend development. -->
 
 ---
 
